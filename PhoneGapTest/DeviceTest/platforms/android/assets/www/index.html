@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <title>Hello World</title>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+    	document.addEventListener("deviceready", onDeviceReady, false);
+    	function onDeviceReady()
+    	{
+    		window.addEventListener("batterystatus", onBatteryStatus, false);
+	 		window.addEventListener("batterycritical", onBatteryCritical, false);
+    	}
+    	//Display Device Information
+    	function DisplayDeviceInfo()
+    	{
+        	var element = document.getElementById('deviceProperties');
+        	element.innerHTML = 'Device Name: '     + device.name     + '<br />' +
+                           'Device Cordova: '  + device.cordova  + '<br />' +
+                           'Device Platform: ' + device.platform + '<br />' +
+                          'Device UUID: '     + device.uuid     + '<br />' +
+                            'Device Version: '  + device.version  + '<br />';
+        }	    
+        
+		function onBatteryStatus(info)
+		{
+    		// Handle the online event
+    		var element = document.getElementById('BatteryStatus');
+        	element.innerHTML="Level: " + info.level + "<br /> isPlugged: " + info.isPlugged+"<br />";
+    		console.log("*******************Level: " + info.level + "\n isPlugged: " + info.isPlugged+"\n");
+		}
+    	function onBatteryCritical(info)
+    	{
+    		// Handle the battery critical event
+    		alert("Battery Level Critical " + info.level + "%\nRecharge Soon!");
+		} 
+		 
+		
+    	function TakePicture() 
+    	{
+      		// Take picture using device camera and retrieve image as base64-encoded string
+    		navigator.camera.getPicture(onSuccess, onFail, { quality: 50,destinationType: Camera.DestinationType.DATA_URL});
+		}
+		function onSuccess(imageData) 
+		{
+			console.log("In on Success");
+   			var image = document.getElementById('myImage');
+    		image.src = "data:image/jpeg;base64," + imageData;
+    		image.style.margin = "10px";
+   			image.style.display = "block";
+    		alert('Image Displayed');
+    	}
+		function onFail(message) 
+		{
+    		alert('Failed because: ' + message);
+		}
+        </script>
+    </head>    
+    <body>
+       <input type=button value="ClickMe" name="clickme" onclick="DisplayDeviceInfo()"/>
+       <p > Displaying Device info</p>
+       <p id="deviceProperties"> Device info</p>
+       <p > Displaying Battery Info</p>
+       <p id="BatteryStatus">Battery Info</p>
+       <input type=button value="TakePic" name="takepic" onclick="TakePicture()"/>
+      <img id="myImage" src="./img/a1.jpg" alt="View2" style="width:304px;height:228px">
+    </body>
+</html>
